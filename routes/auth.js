@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
       if (err) {
         return next(err);
       }
-      res.redirect('/dashboard');
+      res.redirect('/auth/login');
     });
   } catch (err) {
     console.error(err);
