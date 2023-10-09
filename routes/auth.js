@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const User = require('../models/user');
+const isLoggedIn = require('./isLoggedIn');
 
 // Registration
 router.get('/register', (req, res) => {
@@ -17,11 +18,11 @@ router.post('/register', async (req, res) => {
       if (err) {
         return next(err);
       }
-      res.redirect('/auth/login');
+      res.redirect('/api/login');
     });
   } catch (err) {
     console.error(err);
-    res.redirect('/auth/register');
+    res.redirect('/api/register');
   }
 });
 
@@ -33,15 +34,26 @@ router.get('/login', (req, res) => {
 router.post(
   '/login',
   passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/auth/login',
+    successRedirect: '/api/dashboard',
+    failureRedirect: '/api/login',
   })
 );
+router.get('/dashboard', isLoggedIn, (req, res) => {
+  res.render('dashboard', { user: req.user });
+});
 
 // Logout
 router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/api'); 
+  });
 });
+
+router.get('/',(req, res) => {
+  res.render('home');
+})
 
 module.exports = router;

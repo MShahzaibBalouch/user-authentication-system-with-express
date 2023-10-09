@@ -23,20 +23,24 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Routes
-const authRoutes = require('./routes/auth');
-app.use('/auth', authRoutes);
+// MongoDB connection
+const dbUrl = 'mongodb://127.0.0.1:27017';
+const dbName = 'users';
 
-mongoose.connect('mongodb://localhost:27017/users', {
+mongoose.connect(`${dbUrl}/${dbName}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log(`Connected to MongoDB: ${dbUrl}/${dbName}`);
   })
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
   });
+
+// Routes
+const authRoutes = require('./routes/auth');
+app.use('/api', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
