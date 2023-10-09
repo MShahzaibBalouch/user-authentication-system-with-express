@@ -24,8 +24,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // MongoDB connection
-const dbUrl = 'mongodb://127.0.0.1:27017';
-const dbName = 'users';
+const dbUrl = 'mongodb+srv://channarasad97:channarasad97@cluster0.1yye5pf.mongodb.net';
+const dbName = 'authenctication';
 
 mongoose.connect(`${dbUrl}/${dbName}`, {
   useNewUrlParser: true,
